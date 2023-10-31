@@ -15,11 +15,16 @@ body {
 }
 
 header {
-    background-color: #1d4e89;
+    background-color: #1d4e89; 
+    background-image: url('images/background-image.png');
+    background-position: center; /* or wherever you want the logo to appear */
+    background-repeat: no-repeat;
     color: #fff;
     text-align: center;
     padding: 30px 0;
 }
+
+
 
 header h1 {
     margin: 0;
