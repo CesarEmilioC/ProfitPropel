@@ -1,1 +1,2 @@
 cd desktop/Internships/ProfitPropel/Webpage
+run html: python3 -m http.server
