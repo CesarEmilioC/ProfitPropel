@@ -5,21 +5,24 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'a-very-secret-key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///messages.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # You can change this path to your preferred location
 
 db = SQLAlchemy(app)
-
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(150), nullable=False)
-    email = db.Column(db.String(150), nullable=False)
-    message_text = db.Column(db.Text, nullable=False)
 
 class ContactForm(FlaskForm):
     name = StringField('Name')
     email = StringField('Email')
     message = TextAreaField('Message')
     submit = SubmitField('Submit')
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    message = db.Column(db.Text, nullable=False)
+
+    def __repr__(self):
+        return f"Message('{self.name}', '{self.email}')"
 
 @app.route('/')
 def index():
@@ -35,16 +38,16 @@ def submit_form():
         email = form.email.data
         message_text = form.message.data
         
-        new_message = Message(name=name, email=email, message_text=message_text)
-        db.session.add(new_message)
+        message = Message(name=name, email=email, message=message_text)
+        db.session.add(message)
         db.session.commit()
-
-        flash("Your message has been sent successfully!", "success")
-        return redirect(url_for('index'))
         
-    flash("There was an error sending your message. Please check your inputs.", "error")
+        flash('Your message has been sent successfully!', 'success')
+        return redirect(url_for('index'))
+    
     return render_template('index.html', form=form)
 
 if __name__ == '__main__':
-    db.create_all()
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
