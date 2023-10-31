@@ -4,7 +4,15 @@ python3 -m venv venv
 
 source venv/bin/activate
 
-pip install Flask Flask-WTF
-
 python3 app.py
 
+
+
+Libraries: 
+
+
+pip install Flask-SQLAlchemy
+
+pip install Flask Flask-WTF
+
+pip install flask flask_wtf flask_sqlalchemy

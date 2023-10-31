@@ -1,9 +1,19 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'a-very-secret-key'  # This key is essential for form protection in Flask-WTF. In production, use a more secure key and store it safely.
+app.config['SECRET_KEY'] = 'a-very-secret-key'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///messages.db'
+
+db = SQLAlchemy(app)
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), nullable=False)
+    email = db.Column(db.String(150), nullable=False)
+    message_text = db.Column(db.Text, nullable=False)
 
 class ContactForm(FlaskForm):
     name = StringField('Name')
@@ -23,13 +33,18 @@ def submit_form():
     if form.validate_on_submit():
         name = form.name.data
         email = form.email.data
-        message = form.message.data
+        message_text = form.message.data
         
-        # You can now use these variables to store in the database, send an email, etc.
-        
-        return redirect('/')  # Redirecting the user back to the homepage or perhaps a 'thank you' page
+        new_message = Message(name=name, email=email, message_text=message_text)
+        db.session.add(new_message)
+        db.session.commit()
 
-    return render_template('index.html', form=form)  # Return the form with errors (if any)
+        flash("Your message has been sent successfully!", "success")
+        return redirect(url_for('index'))
+        
+    flash("There was an error sending your message. Please check your inputs.", "error")
+    return render_template('index.html', form=form)
 
 if __name__ == '__main__':
+    db.create_all()
     app.run(debug=True)
