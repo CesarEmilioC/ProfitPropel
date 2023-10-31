@@ -1,2 +1,17 @@
 cd desktop/Internships/ProfitPropel/Webpage
-run html: python3 -m http.server
+
+pip3 install Flask
+
+pip install Flask-WTF
+
+
+python3 -m venv venv
+
+source venv/bin/activate
+
+venv\Scripts\activate
+
+pip install Flask
+
+python3 app.py
+
