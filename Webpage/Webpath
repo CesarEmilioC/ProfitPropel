@@ -1,17 +1,23 @@
 cd desktop/Internships/ProfitPropel/Webpage
 
-pip3 install Flask
-
-pip install Flask-WTF
-
-
 python3 -m venv venv
 
 source venv/bin/activate
 
-venv\Scripts\activate
-
-pip install Flask
-
 python3 app.py
 
+
+
+Libraries: 
+
+
+pip install Flask-SQLAlchemy
+
+pip install Flask Flask-WTF
+
+pip install flask flask_wtf flask_sqlalchemy
+
+
+SQL
+
+Messages database: sqlite3 site.db #site.db is the name of the database sqlite3 is the comand to run.
